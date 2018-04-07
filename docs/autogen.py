@@ -271,6 +271,17 @@ PAGES = [
         'page': 'preprocessing/image.md',
         'classes': [
             (preprocessing.image.ImageDataGenerator, '*')
+        ],
+        'functions': [
+            preprocessing.image.array_to_img,
+            preprocessing.image.img_to_array,
+            preprocessing.image.load_img,
+            preprocessing.image.random_rotation,
+            preprocessing.image.random_shift,
+            preprocessing.image.random_shear,
+            preprocessing.image.random_zoom,
+            preprocessing.image.random_channel_shift,
+            preprocessing.image.random_brightness,  
         ]
     },
     {
@@ -547,7 +558,7 @@ def render_function(function, method=True):
     subblocks = []
     signature = get_function_signature(function, method=method)
     signature = signature.replace(function.__module__ + '.', '')
-    level = 3
+    level = 4 if method else 3
     subblocks.append('#' * level + ' ' + function.__name__ + '\n')
     subblocks.append(code_snippet(signature))
     docstring = function.__doc__
@@ -589,7 +600,7 @@ for page_data in PAGES:
         subblocks.append('<span style="float:right;">' +
                          class_to_source_link(cls) + '</span>')
         if element[1]:
-            subblocks.append('## ' + cls.__name__ + ' class\n')
+            subblocks.append('### ' + cls.__name__ + ' class\n')
         else:
             subblocks.append('### ' + cls.__name__ + '\n')
         subblocks.append(code_snippet(signature))
@@ -599,8 +610,8 @@ for page_data in PAGES:
         methods = collect_class_methods(cls, element[1])
         if methods:
             subblocks.append('\n---')
-            subblocks.append('## ' + cls.__name__ + ' methods\n')
-            subblocks.append('\n---\n'.join(
+            subblocks.append('### ' + cls.__name__ + ' methods\n')
+            subblocks.append('\n'.join(
                 [render_function(method, method=True) for method in methods]))
         blocks.append('\n'.join(subblocks))
 
